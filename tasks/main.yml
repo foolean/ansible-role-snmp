@@ -3,9 +3,19 @@
 # SPDX short identifier: BSD-3-Clause
 ---
 
-- name: Ensure SNMP server is not installed (CIS)
-  become: true
-  ansible.builtin.package:
-    name:
-      - 'net-snmp'
-    state: absent
+# We put the entire role in a block so we can create
+# a role specific tag, which saves the caller from
+# having to do so in their playbook.
+- name: Role foolean/snmp
+  block:
+
+    - name: Ensure SNMP server is not installed (CIS)
+      become: true
+      ansible.builtin.package:
+        name:
+          - 'net-snmp'
+        state: absent
+
+  # Tags to be applied to this role (block)
+  tags:
+    - 'role_foolean_snmp'
