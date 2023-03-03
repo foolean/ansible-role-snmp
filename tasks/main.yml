@@ -9,11 +9,17 @@
 - name: Role foolean/snmp
   block:
 
-    - name: Ensure SNMP server is not installed (CIS)
+    - name: Set OS variables
+      ansible.builtin.include_vars:
+        file: "{{ item }}"
+      with_first_found:
+        - "{{ ansible_os_family|lower }}.yml"
+        - "default.yml"
+
+    - name: CIS | Ensure SNMP server is not installed
       become: true
       ansible.builtin.package:
-        name:
-          - 'net-snmp'
+        name: "{{ snmp_packages }}"
         state: absent
 
   # Tags to be applied to this role (block)
